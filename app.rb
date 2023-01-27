@@ -4,6 +4,9 @@ require 'sinatra/reloader' if settings.development?
 require 'dotenv/load' if settings.development?
 require 'logger'
 require 'slack'
+require 'pry' if settings.development?
+require_relative 'task_assignment_modal'
+require_relative 'task_assignment_message'
 
 Slack.configure do |config|
   config.token = ENV['SLACK_BOT_TOKEN']
@@ -34,15 +37,18 @@ module Donut
     ###
     post '/interactions' do
       payload = JSON.parse(params[:payload], symbolize_names: true)
-      Donut::App.logger.info "\n[+] Interaction type #{payload[:type]} recieved."
-      Donut::App.logger.info "\n[+] Payload:\n#{JSON.pretty_generate(payload)}"
+      # Donut::App.logger.info "\n[+] Interaction type #{payload[:type]} recieved."
+      # Donut::App.logger.info "\n[+] Payload:\n#{JSON.pretty_generate(payload)}"
 
       client = Slack::Web::Client.new
-      user_id = payload[:user][:id]
-      channel_id = client.conversations_open(users: user_id).channel.id
 
-      client.chat_postMessage(channel: channel_id, text: "Hello, <@#{user_id}>!")
+      case payload[:type]
+      when 'shortcut' # Someone has openend the shortcut
+        modal = TaskAssignmentModal.create(payload[:trigger_id])
 
+        # views_push, views_open, views_publish, views_update
+        client.views_open(modal)
+      end
       200
     end
 
