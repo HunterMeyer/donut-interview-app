@@ -48,7 +48,20 @@ module Donut
 
         # views_push, views_open, views_publish, views_update
         client.views_open(modal)
-      end
+      when 'view_submission' # Someone has submitted the modal
+        author       = payload[:user]
+        input_values = payload.dig(:view, :state, :values)
+        assignees    = input_values.dig(:task_assignees, :task_assignees, :selected_users)
+
+        assignees.each do |assignee_id|
+          assignment = TaskAssignmentMessage.create(
+            task:     input_values.dig(:task_description, :task_description, :value),
+            author:   author,
+          )
+
+          channel_id = client.conversations_open(users: assignee_id).channel.id
+          client.chat_postMessage(channel: channel_id, text: assignment)
+        end
       200
     end
 
