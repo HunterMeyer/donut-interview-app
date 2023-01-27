@@ -5,4 +5,5 @@ gem 'slack-ruby-client'
 group :development do
   gem 'sinatra-contrib'
   gem 'dotenv'
+  gem 'pry'
 end
