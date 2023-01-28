@@ -43,7 +43,7 @@ module Donut
       when 'shortcut' # Someone has openend the modal
         TaskCreateWorkflow.call(client: client, payload: payload)
       when 'view_submission' # Someone has submitted the modal
-        TaskAssignmentWorkFlow.call(client: client, payload: payload)
+        TaskAssignmentWorkflow.call(client: client, payload: payload)
       when 'block_actions' # Someone has completed a task
         TaskCompleteWorkflow.call(client: client, payload: payload)
       end

@@ -1,4 +1,4 @@
-class TaskAssignmentWorkFlow
+class TaskAssignmentWorkflow
   def self.call(client:, payload:)
     author    = payload[:user]
     input     = payload.dig(:view, :state, :values)
