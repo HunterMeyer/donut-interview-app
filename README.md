@@ -1,3 +1,25 @@
+# Donut
+
+## Create and Assign a Task
+You can create a task by clicking the Dough (Beta) app from the Shortcuts menu.
+
+You must enter a task description and one or more assignees
+
+![Create a Task](/public/create-task.png)
+
+## Completing a Task
+Assignees will receive a DM from Dough (Beta) letting them know you have assigned them a task.
+
+They can click the "Task Complete" button to indicate they have completed the task.
+
+![Complete Task](/public/complete-task.gif)
+
+You will be notified when the task is completed!
+
+![Author Notice](/public/author-completion.png)
+
+Enjoy 🍩
+
 # slack-app-template
 
 Hi there! This is the template app for the Donut code challenge. In addition to this repo, some other configuration has already happened.
