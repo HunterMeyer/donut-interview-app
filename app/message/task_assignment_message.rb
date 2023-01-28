@@ -27,7 +27,7 @@ class TaskAssignmentMessage
               style: 'primary',
               text: {
                 type: 'plain_text',
-                text: 'Task Complete',
+                text: 'Task Complete'
               },
             }
           ]

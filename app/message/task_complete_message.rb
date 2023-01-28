@@ -37,7 +37,6 @@ class TaskCompleteMessage
       blocks: [
         {
           type: 'section',
-          block_id: 'task_notice_block',
           text: {
             type: 'plain_text',
             text: "<@#{assignee[:username]}> has completed a task"
@@ -48,7 +47,6 @@ class TaskCompleteMessage
         },
         {
           type: 'section',
-          block_id: 'task_text_block',
           text: {
             type: 'mrkdwn',
             text: task

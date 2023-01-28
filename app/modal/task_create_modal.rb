@@ -6,12 +6,11 @@ class TaskCreateModal
         type: 'modal',
         title: {
           type: 'plain_text',
-          text: 'Dough Tasks',
-          emoji: true
+          text: 'Dough Tasks'
         },
         submit: {
           type: 'plain_text',
-          text: 'Submit',
+          text: 'Submit'
         },
         close: {
           type: 'plain_text',

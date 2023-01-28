@@ -6,7 +6,7 @@ class TaskCompleteWorkflow
     channel_id = payload.dig(:container, :channel_id)
     message_ts = payload.dig(:container, :message_ts)
 
-    # Reqrite task assignment message in assignee DM
+    # Rewrite task assignment message in assignee DM
     assignee_message = TaskCompleteMessage.for_assignee(author: author, task: task)
     client.chat_update(channel: channel_id, ts: message_ts, **assignee_message)
 
