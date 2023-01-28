@@ -5,8 +5,8 @@ require 'dotenv/load' if settings.development?
 require 'logger'
 require 'slack'
 require 'pry' if settings.development?
-require_relative 'task_assignment_modal'
-require_relative 'task_assignment_message'
+
+Dir['app/**/*.rb'].each { |file_path| require_relative file_path }
 
 Slack.configure do |config|
   config.token = ENV['SLACK_BOT_TOKEN']
@@ -37,31 +37,16 @@ module Donut
     ###
     post '/interactions' do
       payload = JSON.parse(params[:payload], symbolize_names: true)
-      # Donut::App.logger.info "\n[+] Interaction type #{payload[:type]} recieved."
-      # Donut::App.logger.info "\n[+] Payload:\n#{JSON.pretty_generate(payload)}"
-
-      client = Slack::Web::Client.new
+      client  = Slack::Web::Client.new
 
       case payload[:type]
-      when 'shortcut' # Someone has openend the shortcut
-        modal = TaskAssignmentModal.create(payload[:trigger_id])
-
-        # views_push, views_open, views_publish, views_update
-        client.views_open(modal)
+      when 'shortcut' # Someone has openend the modal
+        TaskCreateWorkflow.call(client: client, payload: payload)
       when 'view_submission' # Someone has submitted the modal
-        author       = payload[:user]
-        input_values = payload.dig(:view, :state, :values)
-        assignees    = input_values.dig(:task_assignees, :task_assignees, :selected_users)
-
-        assignees.each do |assignee_id|
-          assignment = TaskAssignmentMessage.create(
-            task:     input_values.dig(:task_description, :task_description, :value),
-            author:   author,
-          )
-
-          channel_id = client.conversations_open(users: assignee_id).channel.id
-          client.chat_postMessage(channel: channel_id, text: assignment)
-        end
+        TaskAssignmentWorkFlow.call(client: client, payload: payload)
+      when 'block_actions' # Someone has completed a task
+        TaskCompleteWorkflow.call(client: client, payload: payload)
+      end
       200
     end
 
